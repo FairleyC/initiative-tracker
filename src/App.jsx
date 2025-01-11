@@ -1,4 +1,4 @@
-import TurnOrderList from './components/TurnOrderList'
+import EncounterList from './components/EncounterList'
 import './App.css'
 
 function App() {
@@ -15,12 +15,12 @@ function App() {
           </div>
         </header>
         <main className="bg-[#252526] rounded-xl shadow-xl p-6 ring-1 ring-[#2d2d2d]">
-          <TurnOrderList />
+          <EncounterList />
         </main>
         <footer className="mt-6 text-center text-sm text-[#8c8c8c]">
           <p>Keyboard Shortcuts:</p>
-          <p className="mt-1">Press <kbd className="px-1 py-0.5 bg-[#333333] rounded">Ctrl +</kbd> to add a new turn order</p>
-          <p className="mt-1">Press <kbd className="px-1 py-0.5 bg-[#333333] rounded">+</kbd> to add a new character</p>
+          <p className="mt-1">Press <kbd className="px-1 py-0.5 bg-[#333333] rounded">Ctrl +</kbd> to add a new encounter</p>
+          <p className="mt-1">Press <kbd className="px-1 py-0.5 bg-[#333333] rounded">+</kbd> to add a new character to the top encounter</p>
         </footer>
       </div>
     </div>

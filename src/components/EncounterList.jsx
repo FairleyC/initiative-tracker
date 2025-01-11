@@ -2,81 +2,81 @@ import { useState, useEffect, useRef } from 'react';
 import { PlusCircleIcon, TrashIcon, UserPlusIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import Character from './Character';
 
-const TurnOrderList = () => {
-  const [turnOrders, setTurnOrders] = useState(() => {
+const EncounterList = () => {
+  const [encounters, setEncounters] = useState(() => {
     try {
-      const savedTurnOrders = localStorage.getItem('turnOrders');
-      return savedTurnOrders ? JSON.parse(savedTurnOrders) : [];
+      const savedEncounters = localStorage.getItem('encounters');
+      return savedEncounters ? JSON.parse(savedEncounters) : [];
     } catch (error) {
       return [];
     }
   });
   const [lastAddedCharacterId, setLastAddedCharacterId] = useState(null);
-  const [lastAddedTurnOrderId, setLastAddedTurnOrderId] = useState(null);
-  const turnOrderNameRefs = useRef({});
+  const [lastAddedEncounterId, setLastAddedEncounterId] = useState(null);
+  const encounterNameRefs = useRef({});
 
   useEffect(() => {
-    // Save turn orders to localStorage whenever they change
+    // Save encounters to localStorage whenever they change
     try {
-      localStorage.setItem('turnOrders', JSON.stringify(turnOrders));
+      localStorage.setItem('encounters', JSON.stringify(encounters));
     } catch (error) {
       // Silently handle storage errors
     }
-  }, [turnOrders]);
+  }, [encounters]);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === '+') {
         if (event.ctrlKey) {
-          // Add new turn order when Ctrl + "+" is pressed
+          // Add new encounter when Ctrl + "+" is pressed
           event.preventDefault();
-          const newTurnOrderId = Date.now();
-          addTurnOrder(newTurnOrderId);
-        } else if (turnOrders.length > 0) {
-          // Add character to the first turn order when only "+" is pressed
+          const newEncounterId = Date.now();
+          addEncounter(newEncounterId);
+        } else if (encounters.length > 0) {
+          // Add character to the first encounter when only "+" is pressed
           const newCharacterId = Date.now();
-          addCharacter(turnOrders[0].id, newCharacterId);
+          addCharacter(encounters[0].id, newCharacterId);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [turnOrders]);
+  }, [encounters]);
 
   useEffect(() => {
-    // Focus the name input of the newly added turn order
-    if (lastAddedTurnOrderId && turnOrderNameRefs.current[lastAddedTurnOrderId]) {
-      turnOrderNameRefs.current[lastAddedTurnOrderId].focus();
-      setLastAddedTurnOrderId(null);
+    // Focus the name input of the newly added encounter
+    if (lastAddedEncounterId && encounterNameRefs.current[lastAddedEncounterId]) {
+      encounterNameRefs.current[lastAddedEncounterId].focus();
+      setLastAddedEncounterId(null);
     }
-  }, [lastAddedTurnOrderId]);
+  }, [lastAddedEncounterId]);
 
-  const addTurnOrder = (id = Date.now()) => {
-    const newTurnOrder = {
+  const addEncounter = (id = Date.now()) => {
+    const newEncounter = {
       id,
       name: '',
       characters: []
     };
-    setTurnOrders([newTurnOrder, ...turnOrders]);
-    setLastAddedTurnOrderId(id);
+    setEncounters([newEncounter, ...encounters]);
+    setLastAddedEncounterId(id);
   };
 
-  const deleteTurnOrder = (id) => {
-    setTurnOrders(turnOrders.filter(order => order.id !== id));
+  const deleteEncounter = (id) => {
+    setEncounters(encounters.filter(order => order.id !== id));
   };
 
-  const updateTurnOrderName = (id, newName) => {
-    setTurnOrders(turnOrders.map(order => 
+  const updateEncounterName = (id, newName) => {
+    setEncounters(encounters.map(order => 
       order.id === id ? { ...order, name: newName } : order
     ));
   };
 
-  const addCharacter = (turnOrderId, characterId = Date.now()) => {
+  const addCharacter = (encounterId, characterId = Date.now()) => {
     const newCharacterId = characterId;
-    setTurnOrders(prevOrders => {
+    setEncounters(prevOrders => {
       const newOrders = prevOrders.map(order => {
-        if (order.id === turnOrderId) {
+        if (order.id === encounterId) {
           return {
             ...order,
             characters: [...order.characters, {
@@ -94,9 +94,9 @@ const TurnOrderList = () => {
     setLastAddedCharacterId(newCharacterId);
   };
 
-  const updateCharacter = (turnOrderId, character) => {
-    setTurnOrders(turnOrders.map(order => {
-      if (order.id === turnOrderId) {
+  const updateCharacter = (encounterId, character) => {
+    setEncounters(encounters.map(order => {
+      if (order.id === encounterId) {
         // Create a new array with the updated character
         const updatedCharacters = order.characters.map(c => 
           c.id === character.id ? character : c
@@ -123,9 +123,9 @@ const TurnOrderList = () => {
     }));
   };
 
-  const deleteCharacter = (turnOrderId, characterId) => {
-    setTurnOrders(turnOrders.map(order => {
-      if (order.id === turnOrderId) {
+  const deleteCharacter = (encounterId, characterId) => {
+    setEncounters(encounters.map(order => {
+      if (order.id === encounterId) {
         return {
           ...order,
           characters: order.characters.filter(c => c.id !== characterId)
@@ -135,9 +135,9 @@ const TurnOrderList = () => {
     }));
   };
 
-  const shiftCharacter = (turnOrderId, characterId, direction) => {
-    setTurnOrders(turnOrders.map(order => {
-      if (order.id === turnOrderId) {
+  const shiftCharacter = (encounterId, characterId, direction) => {
+    setEncounters(encounters.map(order => {
+      if (order.id === encounterId) {
         const characters = [...order.characters];
         const index = characters.findIndex(c => c.id === characterId);
         if (direction === 'left' && index > 0) {
@@ -151,7 +151,7 @@ const TurnOrderList = () => {
     }));
   };
 
-  const handleTurnOrderNameKeyDown = (e) => {
+  const handleEncounterNameKeyDown = (e) => {
     if (e.key === '+') {
       e.preventDefault();
       // Don't return, let the event bubble up to the window handler
@@ -161,27 +161,27 @@ const TurnOrderList = () => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-[#cccccc]">Turn Orders</h2>
+        <h2 className="text-2xl font-bold text-[#cccccc]">Encounters</h2>
         <button 
-          onClick={() => addTurnOrder()}
+          onClick={() => addEncounter()}
           className="p-2 rounded-lg hover:bg-[#2a2d2e] transition-colors duration-200"
-          title="Add Turn Order (Ctrl + +)"
+          title="Add Encounter (Ctrl + +)"
         >
           <PlusCircleIcon className="w-8 h-8 text-[#cccccc] hover:text-white" />
         </button>
       </div>
       
       <div className="space-y-6">
-        {turnOrders.map(order => (
+        {encounters.map(order => (
           <div key={order.id} className="border border-[#2d2d2d] bg-[#252526] p-4 rounded-lg shadow">
             <div className="flex justify-between items-center mb-4">
               <input
-                ref={el => turnOrderNameRefs.current[order.id] = el}
+                ref={el => encounterNameRefs.current[order.id] = el}
                 type="text"
                 value={order.name}
-                placeholder="Turn Order Name"
-                onChange={(e) => updateTurnOrderName(order.id, e.target.value)}
-                onKeyDown={handleTurnOrderNameKeyDown}
+                placeholder="Encounter Name"
+                onChange={(e) => updateEncounterName(order.id, e.target.value)}
+                onKeyDown={handleEncounterNameKeyDown}
                 className="text-xl font-semibold bg-transparent border-b border-[#2d2d2d] focus:border-[#0e639c] outline-none text-[#cccccc]"
               />
               <div className="flex gap-2">
@@ -193,9 +193,9 @@ const TurnOrderList = () => {
                   <UserPlusIcon className="w-6 h-6 text-[#cccccc] hover:text-white" />
                 </button>
                 <button
-                  onClick={() => deleteTurnOrder(order.id)}
+                  onClick={() => deleteEncounter(order.id)}
                   className="p-2 rounded-lg hover:bg-[#2a2d2e] transition-colors duration-200"
-                  title="Delete Turn Order"
+                  title="Delete Encounter"
                 >
                   <TrashIcon className="w-6 h-6 text-[#cccccc] hover:text-white" />
                 </button>
@@ -244,4 +244,4 @@ const TurnOrderList = () => {
   );
 };
 
-export default TurnOrderList; 
+export default EncounterList; 
