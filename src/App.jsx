@@ -9,17 +9,19 @@ function App() {
           <div className="bg-[#252526] p-1 rounded-lg shadow-lg mb-2 ring-1 ring-[#2d2d2d]">
             <div className="rounded-md">
               <h1 className="text-4xl md:text-5xl font-extrabold text-center py-6 bg-clip-text text-[#cccccc]">
-                D&D Initiative Tracker
+                Initiative Tracker
               </h1>
             </div>
           </div>
-          <p className="text-[#858585] text-center text-sm md:text-base animate-fade-in">
-            Track your party's initiative with style
-          </p>
         </header>
         <main className="bg-[#252526] rounded-xl shadow-xl p-6 ring-1 ring-[#2d2d2d]">
           <TurnOrderList />
         </main>
+        <footer className="mt-6 text-center text-sm text-[#8c8c8c]">
+          <p>Keyboard Shortcuts:</p>
+          <p className="mt-1">Press <kbd className="px-1 py-0.5 bg-[#333333] rounded">Ctrl +</kbd> to add a new turn order</p>
+          <p className="mt-1">Press <kbd className="px-1 py-0.5 bg-[#333333] rounded">+</kbd> to add a new character</p>
+        </footer>
       </div>
     </div>
   )

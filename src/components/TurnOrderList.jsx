@@ -3,22 +3,25 @@ import { PlusCircleIcon, TrashIcon, UserPlusIcon, ArrowLeftIcon, ArrowRightIcon 
 import Character from './Character';
 
 const TurnOrderList = () => {
-  const [turnOrders, setTurnOrders] = useState([]);
+  const [turnOrders, setTurnOrders] = useState(() => {
+    try {
+      const savedTurnOrders = localStorage.getItem('turnOrders');
+      return savedTurnOrders ? JSON.parse(savedTurnOrders) : [];
+    } catch (error) {
+      return [];
+    }
+  });
   const [lastAddedCharacterId, setLastAddedCharacterId] = useState(null);
   const [lastAddedTurnOrderId, setLastAddedTurnOrderId] = useState(null);
   const turnOrderNameRefs = useRef({});
 
   useEffect(() => {
-    // Load turn orders from localStorage on component mount
-    const savedTurnOrders = localStorage.getItem('turnOrders');
-    if (savedTurnOrders) {
-      setTurnOrders(JSON.parse(savedTurnOrders));
-    }
-  }, []);
-
-  useEffect(() => {
     // Save turn orders to localStorage whenever they change
-    localStorage.setItem('turnOrders', JSON.stringify(turnOrders));
+    try {
+      localStorage.setItem('turnOrders', JSON.stringify(turnOrders));
+    } catch (error) {
+      // Silently handle storage errors
+    }
   }, [turnOrders]);
 
   useEffect(() => {
